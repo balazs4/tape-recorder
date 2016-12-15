@@ -1,0 +1,15 @@
+#! /usr/bin/env node
+
+const {unlinkSync} = require('fs');
+const {join} = require('path');
+const id3 = require('node-id3');
+
+const [_, __, param] = process.argv;
+const mp3 = join(__dirname, param);
+const tags = Object.assign({}, require(mp3.replace('.mp3', '.json')), { image: mp3.replace('.mp3', '.png') });
+const success = id3.write(tags, mp3);
+
+if (success) {
+    unlinkSync(mp3.replace('.mp3', '.json'));
+    unlinkSync(mp3.replace('.mp3', '.png'));
+}

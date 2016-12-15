@@ -946,6 +946,10 @@ nested-error-stacks@^1.0.0:
   dependencies:
     inherits "~2.0.1"
 
+node-id3@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/node-id3/-/node-id3-0.0.7.tgz#9c257c101820a201dac24de813a0e13675837928"
+
 node-pre-gyp@^0.6.29:
   version "0.6.32"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.6.32.tgz#fc452b376e7319b3d255f5f34853ef6fd8fe1fd5"
