@@ -1,2 +1,5 @@
 node_modules
 npm-error.log
+content/*.json
+content/*.mp3
+content/*.png
