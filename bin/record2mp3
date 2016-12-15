@@ -1,3 +1,3 @@
 #! /bin/sh
 
-parec --record --stream-name=deezer --volume=65536 | lame --preset cbr 192 -s 44.1 -r - "$1".mp3
+parec --record --stream-name=deezer --volume=65536 | lame --preset cbr 192 -s 44.1 -r - "$1"
