@@ -1,4 +1,5 @@
 node_modules
+npm-debug.log
 npm-error.log
 content/*.json
 content/*.mp3
