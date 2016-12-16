@@ -1,6 +1,8 @@
 const {exec, execSync} = require('child_process');
-const {join} = require('path');
-const {writeFileSync, existsSync} = require('fs');
+const {join, resolve} = require('path');
+const {writeFileSync, existsSync, unlinkSync} = require('fs');
+const id3 = require('node-id3');
+
 const app = require('express')();
 
 app.use(require('body-parser').urlencoded({ extended: true, limit: '1mb' }));
@@ -18,14 +20,21 @@ app.post('/deezer',
         const name = Object
             .keys(blacklist)
             .reduce((acc, ch) => acc.replace(new RegExp(ch, 'g'), blacklist[ch]),
-            `${artist}.${album}.${title}`.replace(/\s|!|&|\/|'|"|(|)/g, '')
+            `${artist}.${album}.${title}`.replace(/\s|!|&|\/|'|"|\(|\)/g, '')
             );
-        const [audio, picture, metadata] = ['mp3', 'png', 'json'].map(ext => join(__dirname, 'content', `${name}.${ext}`));
+        const [audio, image, metadata] = ['mp3', 'jpg', 'json'].map(ext => join(__dirname, 'content', `${name}.${ext}`));
 
         if (existsSync(audio) === false) {
-            exec(`./bin/record2mp3 ${audio}`);
-            writeFileSync(`${picture}`, cover.replace(/^data:image\/png;base64,/, ''), 'base64');
-            writeFileSync(`${metadata}`, JSON.stringify({ artist, title, album }));
+            const record = exec(`./bin/record2mp3 ${audio}`);
+
+            record.on('close', (code) => {
+                writeFileSync(image, cover.replace(/^data:image\/png;base64,/, ''), 'base64');
+                console.log('Recording stoped...');
+                console.log(id3.write({ artist, title, album, image }, audio) ? "DONE" : "ERROR");
+                unlinkSync(image);
+            })
+
+            //writeFileSync(`${metadata}`, JSON.stringify({ artist, title, album }));
         }
 
         res.sendStatus(202);
